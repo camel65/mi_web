@@ -989,6 +989,7 @@
         }
 
         async function cargarArchivosDesdeServidor() {
+            const respuesta = await fetch('./archivos.json?v=' + new Date().getTime());
             const contenedor = document.getElementById('listaArchivos');
             contenedor.innerHTML = '<p style="text-align: center; color: var(--text-sub);">Cargando archivos...</p>';
 
