@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="es" data-tema="violeta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control</title>
+    <style>
+        :root[data-tema="violeta"] {
+            --bg-color: #0d0b18;
+            --bg-gradient: radial-gradient(circle at 50% 0%, #2a0845 0%, #0d0b18 100%);
+            --card-bg: rgba(25, 18, 48, 0.75);
+            --card-border: rgba(168, 85, 247, 0.3);
+            --accent-color: #00f2fe;
+            --text-main: #f3f4f6;
+            --text-sub: #a78bfa;
+            --danger-color: #ff0055;
+            --hover-bg: rgba(0, 242, 254, 0.12);
+            --badge-bg: rgba(168, 85, 247, 0.25);
+        }
+
+        :root[data-tema="cyberpunk"] {
+            --bg-color: #050b14;
+            --bg-gradient: radial-gradient(circle at 50% 0%, #0d2b45 0%, #050b14 100%);
+            --card-bg: rgba(10, 30, 50, 0.75);
+            --card-border: rgba(0, 242, 254, 0.3);
+            --accent-color: #00ff88;
+            --text-main: #e6f1ff;
+            --text-sub: #00f2fe;
+            --danger-color: #ff0055;
+            --hover-bg: rgba(0, 255, 136, 0.15);
+            --badge-bg: rgba(0, 242, 254, 0.25);
+        }
+
+        :root[data-tema="oscuro"] {
+            --bg-color: #0a0a0c;
+            --bg-gradient: radial-gradient(circle at 50% 0%, #1c1d22 0%, #0a0a0c 100%);
+            --card-bg: rgba(22, 23, 28, 0.85);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --accent-color: #3b82f6;
+            --text-main: #f3f4f6;
+            --text-sub: #9ca3af;
+            --danger-color: #ef4444;
+            --hover-bg: rgba(59, 130, 246, 0.15);
+            --badge-bg: rgba(156, 163, 175, 0.2);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: var(--bg-gradient);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            box-sizing: border-box;
+            transition: background 0.3s ease;
+        }
+
+        .contenedor-principal {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--card-border);
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .header-texto h1 {
+            font-size: 24px;
+            font-weight: 800;
+            margin: 0 0 5px 0;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .header-texto p.subtitulo {
+            color: var(--text-sub);
+            margin: 0;
+            font-size: 13px;
+        }
+
+        .header-acciones {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .select-tema {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .btn-salir {
+            background: rgba(255, 0, 85, 0.15);
+            border: 1px solid var(--danger-color);
+            color: #ff80ab;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-salir:hover {
+            background: var(--danger-color);
+            color: white;
+            box-shadow: 0 0 15px var(--danger-color);
+        }
+
+        .bar-stats {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+            border-radius: 14px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 13px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-sub);
+        }
+
+        .stat-valor {
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .panel-superior {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .tarjeta {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .caja-reloj {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #fecha {
+            font-size: 14px;
+            color: var(--text-sub);
+            text-transform: capitalize;
+            margin-bottom: 5px;
+        }
+
+        #hora {
+            font-size: 38px;
+            font-weight: 800;
+            color: var(--accent-color);
+            letter-spacing: 1px;
+            font-variant-numeric: tabular-nums;
+            text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+        }
+
+        .caja-tiempo {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .caja-tiempo h3 {
+            margin: 0 0 8px 0;
+            font-size: 13px;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .clima-contenido {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .clima-icono { font-size: 40px; }
+
+        .clima-temp {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--accent-color);
+            text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+        }
+
+        .clima-descripcion {
+            font-size: 13px;
+            color: var(--text-main);
+            margin-top: 4px;
+        }
+
+        .menu-botones {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .btn-seccion {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 25px 20px;
+            color: var(--text-main);
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-seccion span.icono { font-size: 36px; }
+
+        .btn-seccion:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-4px);
+            background: var(--hover-bg);
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.25);
+            color: var(--accent-color);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(5, 3, 12, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-overlay.activo {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-contenido {
+            position: relative;
+            background: var(--bg-color);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 720px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            scroll-behavior: smooth;
+        }
+
+        .modal-overlay.activo .modal-contenido { transform: translateY(0); }
+
+        .modal-cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+
+        .modal-cabecera h2 {
+            margin: 0;
+            font-size: 20px;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-cerrar-modal {
+            background: transparent;
+            border: none;
+            color: var(--text-sub);
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .btn-cerrar-modal:hover { color: var(--danger-color); }
+
+        .btn-subir-modal {
+            position: sticky;
+            bottom: 10px;
+            left: 100%;
+            margin-top: 15px;
+            background: var(--card-bg);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            transition: all 0.2s ease;
+            z-index: 100;
+        }
+
+        .btn-subir-modal:hover {
+            background: var(--accent-color);
+            color: #000;
+            transform: scale(1.1);
+        }
+
+        .caja-herramientas {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .contenedor-buscador {
+            position: relative;
+            width: 100%;
+        }
+
+        .input-buscador {
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 10px 35px 10px 15px;
+            border-radius: 10px;
+            color: var(--text-main);
+            font-size: 14px;
+            outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        .input-buscador:focus { border-color: var(--accent-color); }
+
+        .btn-limpiar-busqueda {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: var(--text-sub);
+            font-size: 14px;
+            cursor: pointer;
+            display: none;
+        }
+
+        .pestañas-categorias {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .btn-pestaña {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-sub);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .btn-pestaña.activa, .btn-pestaña:hover {
+            background: var(--hover-bg);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .opcion-playlist {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-sub);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .opcion-playlist input {
+            accent-color: var(--accent-color);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .barra-seleccion {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-seleccion {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-sub);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-seleccion:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .btn-play-seleccionado {
+            background: rgba(0, 242, 254, 0.2);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .btn-play-seleccionado:hover {
+            background: var(--accent-color);
+            color: #000;
+        }
+
+        .lista-archivos {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .item-archivo {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .info-archivo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow: hidden;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .chk-media {
+            accent-color: var(--accent-color);
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .mini-thumb {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            object-fit: cover;
+            background: #000;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .mini-thumb:hover { transform: scale(1.1); }
+
+        .nombre-archivo-privado {
+            font-size: 14px;
+            color: var(--text-main);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .badge-extension {
+            background: var(--badge-bg);
+            color: var(--accent-color);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 6px;
+            border-radius: 5px;
+            text-transform: uppercase;
+        }
+
+        .acciones-archivo {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn-fav {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            transition: transform 0.2s;
+        }
+
+        .btn-fav:hover { transform: scale(1.2); }
+
+        .btn-ver, .btn-descargar {
+            padding: 6px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-ver {
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid var(--text-sub);
+            color: var(--text-sub);
+        }
+
+        .btn-ver:hover {
+            background: var(--text-sub);
+            color: #0d0b18;
+        }
+
+        .btn-descargar {
+            background: rgba(0, 242, 254, 0.2);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .btn-descargar:hover {
+            background: var(--accent-color);
+            color: #000;
+        }
+
+        .reproductor-contenedor {
+            background: rgba(10, 8, 20, 0.95);
+            border: 1px solid var(--accent-color);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .reproductor-cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--accent-color);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .reproductor-controles {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 5px;
+            flex-wrap: wrap;
+        }
+
+        .btn-control-player {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-control-player:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .select-velocidad {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .reproductor-contenedor audio,
+        .reproductor-contenedor video {
+            width: 100%;
+            border-radius: 8px;
+            max-height: 280px;
+        }
+
+        .reproductor-imagen-visor {
+            width: 100%;
+            height: 260px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: #000;
+        }
+
+        .grid-enlaces {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+        }
+
+        .tarjeta-enlace {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 12px;
+            text-decoration: none;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .lightbox-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(10px);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .lightbox-overlay.activo { display: flex; }
+
+        .lightbox-imagen {
+            max-width: 90%;
+            max-height: 65vh;
+            border-radius: 12px;
+            object-fit: contain;
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .lightbox-imagen.zoomed {
+            transform: scale(1.6);
+            cursor: zoom-out;
+        }
+
+        .lightbox-titulo {
+            color: var(--text-main);
+            margin: 15px 0 10px 0;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .lightbox-acciones {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-lightbox {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-lightbox:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            background: var(--hover-bg);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contenedor-principal">
+        
+        <header>
+            <div class="header-texto">
+                <h1>MI WEB</h1>
+                <p class="subtitulo">Servidor GitHub</p>
+            </div>
+
+            <div class="header-acciones">
+                <select class="select-tema" onchange="cambiarTema(this.value)">
+                    <option value="violeta">🎨 Violeta Neón</option>
+                    <option value="cyberpunk">⚡ Cyberpunk Cyan</option>
+                    <option value="oscuro">🌙 Oscuro Profundo</option>
+                </select>
+
+                <button class="btn-salir" onclick="salirDePagina()">
+                    <span>🚪</span> Salir
+                </button>
+            </div>
+        </header>
+
+        <!-- BARRA DE ESTADÍSTICAS -->
+        <div class="bar-stats">
+            <div class="stat-item">
+                <span>Estado:</span>
+                <span class="stat-valor">🟢 Online</span>
+            </div>
+            <div class="stat-item">
+                <span>Archivos:</span>
+                <span class="stat-valor" id="statTotalArchivos">0</span>
+            </div>
+            <div class="stat-item">
+                <span>Categorías:</span>
+                <span class="stat-valor" id="statCategorias">--</span>
+            </div>
+        </div>
+
+        <!-- PANEL SUPERIOR -->
+        <div class="panel-superior">
+            <div class="tarjeta caja-reloj">
+                <div id="fecha">Cargando fecha...</div>
+                <div id="hora">00:00:00</div>
+            </div>
+
+            <div class="tarjeta caja-tiempo">
+                <h3 id="ciudad-titulo">📍 El Tiempo</h3>
+                <div class="clima-contenido">
+                    <div class="clima-icono" id="clima-icono">⏳</div>
+                    <div>
+                        <div class="clima-temp" id="clima-temp">--°C</div>
+                        <div class="clima-descripcion" id="clima-desc">Cargando clima...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MENÚ DE BOTONES -->
+        <div class="menu-botones">
+            <button class="btn-seccion" onclick="abrirModal('modalEnlaces')">
+                <span class="icono">🌐</span>
+                <span>Acceso Rápido</span>
+            </button>
+
+            <button class="btn-seccion" onclick="solicitarAccesoReservado()">
+                <span class="icono">🔒</span>
+                <span>Acceso Reservado</span>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- MODAL: ACCESO RÁPIDO -->
+    <div id="modalEnlaces" class="modal-overlay" onclick="cerrarFuera(event, 'modalEnlaces')">
+        <div class="modal-contenido" id="contenidoEnlaces">
+            <div class="modal-cabecera">
+                <h2>🌐 Acceso Rápido</h2>
+                <button class="btn-cerrar-modal" onclick="cerrarModal('modalEnlaces')">✖</button>
+            </div>
+            <div class="grid-enlaces">
+                 
+                 <a href="https://www.google.com" target="_blank" class="tarjeta-enlace">
+                 <span>🔍</span> Google
+                </a>
+                 <a href="https://destroy.spritefusion.com" target="_blank" class="tarjeta-enlace">
+                    <span>🩻</span> Juego Destructor Páginas Web
+                </a>
+                <a href="https://www.loteriasyapuestas.es/es/resultados/primitiva/comprobar" target="_blank" class="tarjeta-enlace">
+                    <span>💰</span> Comprobar Primitiva
+                </a>
+                <a href="https://www.tarkus.info/autodefinidos/" target="_blank" class="tarjeta-enlace">
+                    <span>📝</span> Autodefinidos
+                </a>
+                <a href="https://myphysicslab.com" target="_blank" class="tarjeta-enlace">
+                    <span>⚗️</span> Laboratorio de Física
+                </a>
+                <a href="https://cybermap.kaspersky.com/es/" target="_blank" class="tarjeta-enlace">
+                    <span>🌍</span> Amenazas Cibernéticas en Tiempo Real
+                </a>
+                <a href="https://www.museodelprado.es/actualidad/multimedia/la-coleccion/e97b3d7c-ab15-f91d-0d4d-8a57d57a32f9?visit=true&lang=es&startScene=80" target="_blank" class="tarjeta-enlace">
+                    <span>🖼️</span> Museo del Prado 3D
+                </a>
+                <a href="https://freeinvaders.org" target="_blank" class="tarjeta-enlace">
+                    <span>🛸</span> Juego Space Invaders
+                </a>
+                <a href="https://www.meneame.net" target="_blank" class="tarjeta-enlace">
+                    <span>🟩</span> Portal de Noticias "Menéame"
+                </a>
+                <a href="https://www.google.es/maps/" target="_blank" class="tarjeta-enlace">
+                    <span>🌍</span> Google Maps
+                </a>
+                <a href="https://www.elhacker.net" target="_blank" class="tarjeta-enlace">
+                    <span>💻</span> elHacker.net
+                </a>
+                 <a href="https://skymap2000.com/" target="_blank" class="tarjeta-enlace">
+                    <span>🪐</span> Atlas del Cielo
+                </a>
+                <a href="https://airport.apunen.com/" target="_blank" class="tarjeta-enlace">
+                    <span>🛬</span> Simulador Aereopuerto
+                </a>
+                <a href="https://www.cinelibreonline.com" target="_blank" class="tarjeta-enlace">
+                    <span>🎞️</span> Cine Libre
+                </a>
+                <a href="https://www.deepl.com/es/translator" target="_blank" class="tarjeta-enlace">
+                    <span>💻</span> Un buen Traductor
+                 </a>
+                <a href="https://haveibeenpwned.com" target="_blank" class="tarjeta-enlace">
+                    <span>📧</span> Comprueba si tu Email ha sufrido Brecha de Seguridad
+
+                 </a>
+            </div>
+            <button class="btn-subir-modal" onclick="subirArribaModal('contenidoEnlaces')" title="Subir arriba">⬆</button>
+        </div>
+    </div>
+
+    <!-- MODAL: ÁREA RESERVADA -->
+    <div id="modalReservado" class="modal-overlay" onclick="cerrarFuera(event, 'modalReservado')">
+        <div class="modal-contenido" id="contenidoReservado">
+            <div class="modal-cabecera">
+                <h2>🔒 Acceso Reservado - Archivos en Servidor</h2>
+                <button class="btn-cerrar-modal" onclick="cerrarModal('modalReservado')">✖</button>
+            </div>
+            
+            <div class="caja-herramientas">
+                <div class="contenedor-buscador">
+                    <input type="text" id="inputBuscador" class="input-buscador" placeholder="🔍 Buscar por nombre..." oninput="manejarBusqueda()">
+                    <button id="btnLimpiar" class="btn-limpiar-busqueda" onclick="limpiarBusqueda()">✖</button>
+                </div>
+
+                <div class="pestañas-categorias">
+                    <button class="btn-pestaña activa" onclick="cambiarFiltroCategoria('todas', this)">Todos</button>
+                    <button class="btn-pestaña" onclick="cambiarFiltroCategoria('audio', this)">🎵 Audio</button>
+                    <button class="btn-pestaña" onclick="cambiarFiltroCategoria('video', this)">🎬 Vídeo</button>
+                    <button class="btn-pestaña" onclick="cambiarFiltroCategoria('imagen', this)">🖼️ Fotos</button>
+                    <button class="btn-pestaña" onclick="cambiarFiltroCategoria('doc', this)">📄 Docs</button>
+                    <button class="btn-pestaña" onclick="cambiarFiltroCategoria('zip', this)">📦 Zip</button>
+                </div>
+                
+                <label class="opcion-playlist">
+                    <input type="checkbox" id="chkPlaylist" checked>
+                    <span>🔁 Reproducción Continua</span>
+                </label>
+
+                <div class="barra-seleccion">
+                    <button class="btn-seleccion btn-play-seleccionado" onclick="reproducirMarcados()">▶ Reproducción Personalizada</button>
+                    <button class="btn-seleccion" onclick="seleccionarTodosMedia(true)">☑ Marcar Todos</button>
+                    <button class="btn-seleccion" onclick="seleccionarTodosMedia(false)">☐ Desmarcar</button>
+                </div>
+            </div>
+
+            <div id="reproductorBox" class="reproductor-contenedor">
+                <div class="reproductor-cabecera">
+                    <span id="reproductorTitulo">▶ Reproduciendo...</span>
+                    <button class="btn-cerrar-modal" style="font-size: 16px;" onclick="cerrarReproductor()">✖</button>
+                </div>
+                <div id="reproductorElemento"></div>
+                <div class="reproductor-controles">
+                    <button class="btn-control-player" onclick="pistaAnterior()">⏮ Anterior</button>
+                    <button class="btn-control-player" id="btnPausarSlide" onclick="togglePausarSlideshow()" style="display:none;">⏸ Pausa</button>
+                    <button class="btn-control-player" onclick="pistaSiguiente()">⏭ Siguiente</button>
+                    <button class="btn-control-player" onclick="reproducirAleatorio()">🔀 Aleatorio</button>
+                    <select id="selectVelocidad" class="select-velocidad" onchange="cambiarVelocidadSlide(this.value)" style="display:none;">
+                        <option value="3000">3s / foto</option>
+                        <option value="5000" selected>5s / foto</option>
+                        <option value="10000">10s / foto</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="listaArchivos" class="lista-archivos">
+                <p style="text-align: center; color: var(--text-sub);">Cargando archivos del servidor...</p>
+            </div>
+
+            <button class="btn-subir-modal" onclick="subirArribaModal('contenidoReservado')" title="Subir arriba">⬆</button>
+        </div>
+    </div>
+
+    <!-- LIGHTBOX -->
+    <div id="lightboxOverlay" class="lightbox-overlay" onclick="cerrarLightboxFuera(event)">
+        <img id="lightboxImg" class="lightbox-imagen" src="" alt="Vista previa" onclick="toggleZoomImg(event)">
+        <div id="lightboxTitulo" class="lightbox-titulo">--</div>
+        <div class="lightbox-acciones">
+            <button class="btn-lightbox" onclick="toggleZoomBtn()">🔍 Ampliar / Zoom</button>
+            <a id="lightboxBtnDescargar" href="" download class="btn-lightbox">⬇ Descargar</a>
+            <button class="btn-lightbox" onclick="compartirImagen()">🔗 Compartir</button>
+            <button class="btn-lightbox" style="border-color: var(--danger-color); color: #ff80ab;" onclick="cerrarLightbox()">✖ Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        const CONTRASEÑA_CORRECTA = "1234";
+        let listaArchivosGlobal = [];
+        let favoritos = JSON.parse(localStorage.getItem('favs_servidor') || '[]');
+        let archivosMarcados = new Set();
+        let filtroCategoriaActual = 'todas';
+        
+        let playlistActual = [];
+        let indicePlaylist = -1;
+        let tipoPlaylist = '';
+        let slideTimer = null;
+        let slidePausado = false;
+
+        let currentLightboxUrl = '';
+        let currentLightboxTitulo = '';
+
+        function cambiarTema(nombreTema) {
+            document.documentElement.setAttribute('data-tema', nombreTema);
+        }
+
+        function subirArribaModal(idContenido) {
+            const modal = document.getElementById(idContenido);
+            if (modal) {
+                modal.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function solicitarAccesoReservado() {
+            const pass = prompt("Introduce la contraseña para ingresar:");
+            if (pass === CONTRASEÑA_CORRECTA) {
+                cargarArchivosDesdeServidor();
+                abrirModal('modalReservado');
+            } else if (pass !== null) {
+                alert("Contraseña incorrecta.");
+            }
+        }
+
+        async function cargarArchivosDesdeServidor() {
+    const contenedor = document.getElementById('listaArchivos');
+    contenedor.innerHTML = '<p style="text-align: center; color: var(--text-sub);">Cargando archivos...</p>';
+
+    try {
+        const respuesta = await fetch('archivos.json');
+        if (!respuesta.ok) throw new Error("No se pudo cargar la lista de archivos.");
+        
+        listaArchivosGlobal = await respuesta.json();
+
+        actualizarEstadisticas(listaArchivosGlobal);
+        renderizarListaArchivos(listaArchivosGlobal);
+
+    } catch (error) {
+        contenedor.innerHTML = '<p style="text-align: center; color: var(--danger-color);">Error al conectar con la lista de archivos.</p>';
+            }
+        }
+
+        function actualizarEstadisticas(archivos) {
+            document.getElementById('statTotalArchivos').innerText = archivos.length;
+            
+            let categorias = new Set();
+            archivos.forEach(a => {
+                let ext = a.split('.').pop().toLowerCase();
+                if (['mp3','wav','ogg','flac','m4a','aac'].includes(ext)) categorias.add('Audio');
+                else if (['mp4','mkv','webm','avi','mov'].includes(ext)) categorias.add('Vídeo');
+                else if (['jpg','png','webp','gif','svg','jpeg'].includes(ext)) categorias.add('Fotos');
+                else if (['zip','rar','7z','tar','gz'].includes(ext)) categorias.add('Compresores');
+                else categorias.add('Docs');
+            });
+
+            document.getElementById('statCategorias').innerText = Array.from(categorias).join(', ') || 'Ninguna';
+        }
+
+        function obtenerPrioridadTipo(extension) {
+            if (['mp3', 'wav', 'ogg', 'flac', 'm4a', 'aac'].includes(extension)) return 1;
+            if (['mp4', 'mkv', 'webm', 'avi', 'mov'].includes(extension)) return 2;
+            if (['jpg', 'png', 'gif', 'webp', 'jpeg', 'svg'].includes(extension)) return 3;
+            if (['pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx'].includes(extension)) return 4;
+            if (['zip', 'rar', '7z', 'tar', 'gz'].includes(extension)) return 5;
+            return 6;
+        }
+
+        function renderizarListaArchivos(archivos) {
+            const contenedor = document.getElementById('listaArchivos');
+
+            if (archivos.length === 0) {
+                contenedor.innerHTML = '<p style="text-align: center; color: var(--text-sub);">No se encontraron archivos.</p>';
+                return;
+            }
+
+            const ordenados = [...archivos].sort((a, b) => {
+                let esFavA = favoritos.includes(a);
+                let esFavB = favoritos.includes(b);
+                if (esFavA !== esFavB) return esFavB - esFavA;
+
+                let extA = a.split('.').pop().toLowerCase();
+                let extB = b.split('.').pop().toLowerCase();
+                let prioA = obtenerPrioridadTipo(extA);
+                let prioB = obtenerPrioridadTipo(extB);
+
+                if (prioA !== prioB) return prioA - prioB;
+
+                return decodeURIComponent(a).localeCompare(decodeURIComponent(b));
+            });
+
+            contenedor.innerHTML = ordenados.map((nombreArchivo) => {
+                const nombreLimpio = decodeURIComponent(nombreArchivo);
+                const extension = nombreLimpio.split('.').pop().toLowerCase();
+                const esFav = favoritos.includes(nombreArchivo);
+                
+                let icono = '📄';
+                let esAudio = ['mp3', 'wav', 'ogg', 'flac', 'm4a', 'aac'].includes(extension);
+                let esVideo = ['mkv', 'mp4', 'webm', 'avi', 'mov'].includes(extension);
+                let esImagen = ['jpg', 'png', 'gif', 'webp', 'jpeg', 'svg'].includes(extension);
+                let esZip = ['zip', 'rar', '7z', 'tar', 'gz'].includes(extension);
+
+                if (['pdf'].includes(extension)) icono = '📕';
+                else if (['doc', 'docx'].includes(extension)) icono = '📘';
+                else if (['txt'].includes(extension)) icono = '📝';
+                else if (esAudio) icono = '🎵';
+                else if (esVideo) icono = '🎬';
+                else if (esImagen) icono = '🖼️';
+                else if (esZip) icono = '📦';
+
+                const rutaCompleta = `archivos/${nombreArchivo}`;
+
+                let vistaIcono = `<span>${icono}</span>`;
+                if (esImagen) {
+                    vistaIcono = `<img src="${rutaCompleta}" class="mini-thumb" onclick="abrirLightbox('${rutaCompleta}', '${nombreLimpio}')" onerror="this.style.display='none'">`;
+                }
+
+                let casillaMedia = '';
+                if (esAudio || esVideo || esImagen) {
+                    const estaMarcado = archivosMarcados.has(nombreArchivo) ? 'checked' : '';
+                    casillaMedia = `<input type="checkbox" class="chk-media" ${estaMarcado} onchange="toggleMarcadoMedia('${nombreArchivo}', this.checked)" title="Marcar para lista personalizada">`;
+                }
+
+                let botonVer = '';
+                if (esAudio) {
+                    botonVer = `<button onclick="iniciarPlaylistAudio('${nombreArchivo}')" class="btn-ver">▶ Escuchar</button>`;
+                } else if (esVideo) {
+                    botonVer = `<button onclick="iniciarPlaylistVideo('${nombreArchivo}')" class="btn-ver">▶ Ver Vídeo</button>`;
+                } else if (esImagen) {
+                    botonVer = `<button onclick="iniciarPlaylistImagen('${nombreArchivo}')" class="btn-ver">▶ Presentación</button>`;
+                } else {
+                    botonVer = `<a href="${rutaCompleta}" target="_blank" class="btn-ver">👁️ Ver</a>`;
+                }
+
+                return `
+                    <div class="item-archivo">
+                        <div class="info-archivo">
+                            ${casillaMedia}
+                            <button class="btn-fav" onclick="toggleFavorito('${nombreArchivo}')">${esFav ? '⭐' : '☆'}</button>
+                            ${vistaIcono}
+                            <span class="nombre-archivo-privado">${nombreLimpio}</span>
+                            <span class="badge-extension">${extension}</span>
+                        </div>
+                        <div class="acciones-archivo">
+                            ${botonVer}
+                            <a href="${rutaCompleta}" download="${nombreLimpio}" class="btn-descargar">⬇ Descargar</a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function cambiarFiltroCategoria(categoria, btn) {
+            filtroCategoriaActual = categoria;
+            document.querySelectorAll('.btn-pestaña').forEach(b => b.classList.remove('activa'));
+            btn.classList.add('activa');
+            filtrarArchivos();
+        }
+
+        function manejarBusqueda() {
+            const input = document.getElementById('inputBuscador');
+            const btnLimpiar = document.getElementById('btnLimpiar');
+            btnLimpiar.style.display = input.value.length > 0 ? 'block' : 'none';
+            filtrarArchivos();
+        }
+
+        function limpiarBusqueda() {
+            const input = document.getElementById('inputBuscador');
+            input.value = '';
+            document.getElementById('btnLimpiar').style.display = 'none';
+            filtrarArchivos();
+        }
+
+        function filtrarArchivos() {
+            const texto = document.getElementById('inputBuscador').value.toLowerCase();
+            
+            const filtrados = listaArchivosGlobal.filter(a => {
+                const nombreLimpio = decodeURIComponent(a).toLowerCase();
+                const ext = nombreLimpio.split('.').pop();
+                
+                const coincideTexto = nombreLimpio.includes(texto);
+
+                let coincideCategoria = true;
+                if (filtroCategoriaActual === 'audio') coincideCategoria = ['mp3', 'wav', 'ogg', 'flac', 'm4a', 'aac'].includes(ext);
+                else if (filtroCategoriaActual === 'video') coincideCategoria = ['mkv', 'mp4', 'webm', 'avi', 'mov'].includes(ext);
+                else if (filtroCategoriaActual === 'imagen') coincideCategoria = ['jpg', 'png', 'gif', 'webp', 'jpeg', 'svg'].includes(ext);
+                else if (filtroCategoriaActual === 'doc') coincideCategoria = ['pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx'].includes(ext);
+                else if (filtroCategoriaActual === 'zip') coincideCategoria = ['zip', 'rar', '7z', 'tar', 'gz'].includes(ext);
+
+                return coincideTexto && coincideCategoria;
+            });
+
+            renderizarListaArchivos(filtrados);
+        }
+
+        function toggleMarcadoMedia(nombreArchivo, estado) {
+            if (estado) archivosMarcados.add(nombreArchivo);
+            else archivosMarcados.delete(nombreArchivo);
+        }
+
+        function seleccionarTodosMedia(marcar) {
+            listaArchivosGlobal.forEach(nombreArchivo => {
+                let ext = nombreArchivo.split('.').pop().toLowerCase();
+                if (['mp3', 'wav', 'ogg', 'mkv', 'mp4', 'webm', 'avi', 'flac', 'm4a', 'aac', 'mov', 'jpg', 'png', 'gif', 'webp', 'jpeg', 'svg'].includes(ext)) {
+                    if (marcar) archivosMarcados.add(nombreArchivo);
+                    else archivosMarcados.delete(nombreArchivo);
+                }
+            });
+            filtrarArchivos();
+        }
+
+        function reproducirMarcados() {
+            let seleccionados = Array.from(archivosMarcados);
+            if (seleccionados.length === 0) {
+                alert("Marca alguna casilla para la reproducción personalizada.");
+                return;
+            }
+
+            let primerExt = seleccionados[0].split('.').pop().toLowerCase();
+            let esAudio = ['mp3', 'wav', 'ogg', 'flac', 'm4a', 'aac'].includes(primerExt);
+            let esImagen = ['jpg', 'png', 'gif', 'webp', 'jpeg', 'svg'].includes(primerExt);
+
+            playlistActual = seleccionados.filter(a => {
+                let ext = a.split('.').pop().toLowerCase();
+                if (esAudio) return ['mp3', 'wav', 'ogg', 'flac', 'm4a', 'aac'].includes(ext);
+                if (esImagen) return ['jpg', 'png', 'gif', 'webp', 'jpeg', 'svg'].includes(ext);
+                return ['mkv', 'mp4', 'webm', 'avi', 'mov'].includes(ext);
+            });
+
+            tipoPlaylist = esAudio ? 'audio' : (esImagen ? 'imagen' : 'video');
+            indicePlaylist = 0;
+            reproducirElementoPlaylist();
+        }
+
+        function iniciarPlaylistAudio(nombreArchivoInicial) {
+            let seleccionAudios = Array.from(archivosMarcados).filter(a => ['mp3', 'wav', 'ogg', 'flac', 'm4a', 'aac'].includes(a.split('.').pop().toLowerCase()));
+            playlistActual = (seleccionAudios.length > 0 && seleccionAudios.includes(nombreArchivoInicial)) ? seleccionAudios : listaArchivosGlobal.filter(a => ['mp3', 'wav', 'ogg', 'flac', 'm4a', 'aac'].includes(a.split('.').pop().toLowerCase()));
+
+            tipoPlaylist = 'audio';
+            indicePlaylist = playlistActual.indexOf(nombreArchivoInicial);
+            reproducirElementoPlaylist();
+        }
+
+        function iniciarPlaylistVideo(nombreArchivoInicial) {
+            let seleccionVideos = Array.from(archivosMarcados).filter(a => ['mkv', 'mp4', 'webm', 'avi', 'mov'].includes(a.split('.').pop().toLowerCase()));
+            playlistActual = (seleccionVideos.length > 0 && seleccionVideos.includes(nombreArchivoInicial)) ? seleccionVideos : listaArchivosGlobal.filter(a => ['mkv', 'mp4', 'webm', 'avi', 'mov'].includes(a.split('.').pop().toLowerCase()));
+
+            tipoPlaylist = 'video';
+            indicePlaylist = playlistActual.indexOf(nombreArchivoInicial);
+            reproducirElementoPlaylist();
+        }
+
+        function iniciarPlaylistImagen(nombreArchivoInicial) {
+            let seleccionImgs = Array.from(archivosMarcados).filter(a => ['jpg', 'png', 'gif', 'webp', 'jpeg', 'svg'].includes(a.split('.').pop().toLowerCase()));
+            playlistActual = (seleccionImgs.length > 0 && seleccionImgs.includes(nombreArchivoInicial)) ? seleccionImgs : listaArchivosGlobal.filter(a => ['jpg', 'png', 'gif', 'webp', 'jpeg', 'svg'].includes(a.split('.').pop().toLowerCase()));
+
+            tipoPlaylist = 'imagen';
+            indicePlaylist = playlistActual.indexOf(nombreArchivoInicial);
+            reproducirElementoPlaylist();
+        }
+
+        function limpiarTemporizadorSlide() {
+            if (slideTimer) {
+                clearTimeout(slideTimer);
+                slideTimer = null;
+            }
+        }
+
+        function reproducirElementoPlaylist() {
+            if (indicePlaylist < 0 || indicePlaylist >= playlistActual.length) return;
+
+            limpiarTemporizadorSlide();
+            slidePausado = false;
+
+            const nombreArchivo = playlistActual[indicePlaylist];
+            const nombreLimpio = decodeURIComponent(nombreArchivo);
+            const rutaCompleta = `archivos/${nombreArchivo}`;
+
+            const box = document.getElementById('reproductorBox');
+            const elem = document.getElementById('reproductorElemento');
+            const btnPausa = document.getElementById('btnPausarSlide');
+            const selVelocidad = document.getElementById('selectVelocidad');
+            
+            let iconoTipo = '🎵';
+            if (tipoPlaylist === 'video') iconoTipo = '🎬';
+            if (tipoPlaylist === 'imagen') iconoTipo = '🖼️';
+
+            document.getElementById('reproductorTitulo').innerText = 
+                `${iconoTipo} (${indicePlaylist + 1}/${playlistActual.length}) ${nombreLimpio}`;
+
+            if (tipoPlaylist === 'audio' || tipoPlaylist === 'video') {
+                btnPausa.style.display = 'none';
+                selVelocidad.style.display = 'none';
+
+                if (tipoPlaylist === 'audio') {
+                    elem.innerHTML = `<audio id="mediaPlayer" controls autoplay src="${rutaCompleta}"></audio>`;
+                } else {
+                    elem.innerHTML = `<video id="mediaPlayer" controls autoplay src="${rutaCompleta}"></video>`;
+                }
+
+                const player = document.getElementById('mediaPlayer');
+
+                // Memoria: recuerda por dónde ibas
+                const tiempoGuardado = localStorage.getItem('pos_' + nombreArchivo);
+                if (tiempoGuardado && parseFloat(tiempoGuardado) > 5) {
+                    player.currentTime = parseFloat(tiempoGuardado);
+                }
+
+                player.ontimeupdate = function() {
+                    if (player.currentTime > 2) {
+                        localStorage.setItem('pos_' + nombreArchivo, player.currentTime);
+                    }
+                };
+
+                player.onended = function() {
+                    localStorage.removeItem('pos_' + nombreArchivo);
+                    const modoContinuo = document.getElementById('chkPlaylist').checked;
+                    if (modoContinuo && (indicePlaylist + 1 < playlistActual.length)) {
+                        pistaSiguiente();
+                    } else {
+                        document.getElementById('reproductorTitulo').innerText = "✅ Reproducción finalizada.";
+                    }
+                };
+
+            } else if (tipoPlaylist === 'imagen') {
+                btnPausa.style.display = 'inline-block';
+                selVelocidad.style.display = 'inline-block';
+                btnPausa.innerText = "⏸ Pausa";
+
+                elem.innerHTML = `<img id="slidePlayer" src="${rutaCompleta}" class="reproductor-imagen-visor" alt="${nombreLimpio}">`;
+
+                const velocidadMs = parseInt(selVelocidad.value) || 5000;
+                slideTimer = setTimeout(() => {
+                    if (!slidePausado) pistaSiguiente();
+                }, velocidadMs);
+            }
+
+            box.style.display = 'flex';
+        }
+
+        function pistaSiguiente() {
+            if (indicePlaylist + 1 < playlistActual.length) {
+                indicePlaylist++;
+                reproducirElementoPlaylist();
+            } else {
+                const modoContinuo = document.getElementById('chkPlaylist').checked;
+                if (modoContinuo && playlistActual.length > 0) {
+                    indicePlaylist = 0;
+                    reproducirElementoPlaylist();
+                } else {
+                    limpiarTemporizadorSlide();
+                    document.getElementById('reproductorTitulo').innerText = "✅ Presentación finalizada.";
+                    if (tipoPlaylist === 'imagen') {
+                        document.getElementById('btnPausarSlide').style.display = 'none';
+                        document.getElementById('selectVelocidad').style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        function pistaAnterior() {
+            if (indicePlaylist - 1 >= 0) {
+                indicePlaylist--;
+                reproducirElementoPlaylist();
+            }
+        }
+
+        function reproducirAleatorio() {
+            if (playlistActual.length <= 1) return;
+            indicePlaylist = Math.floor(Math.random() * playlistActual.length);
+            reproducirElementoPlaylist();
+        }
+
+        function togglePausarSlideshow() {
+            if (tipoPlaylist !== 'imagen') return;
+            const btnPausa = document.getElementById('btnPausarSlide');
+            const selVelocidad = document.getElementById('selectVelocidad');
+            const velocidadMs = parseInt(selVelocidad.value) || 5000;
+
+            if (!slidePausado) {
+                slidePausado = true;
+                limpiarTemporizadorSlide();
+                btnPausa.innerText = "▶ Reanudar";
+            } else {
+                slidePausado = false;
+                btnPausa.innerText = "⏸ Pausa";
+                slideTimer = setTimeout(() => {
+                    if (!slidePausado) pistaSiguiente();
+                }, velocidadMs);
+            }
+        }
+
+        function cambiarVelocidadSlide(nuevaVelocidad) {
+            if (tipoPlaylist !== 'imagen' || slidePausado) return;
+            limpiarTemporizadorSlide();
+            const velocidadMs = parseInt(nuevaVelocidad) || 5000;
+            slideTimer = setTimeout(() => {
+                if (!slidePausado) pistaSiguiente();
+            }, velocidadMs);
+        }
+
+        function toggleFavorito(nombreArchivo) {
+            if (favoritos.includes(nombreArchivo)) {
+                favoritos = favoritos.filter(f => f !== nombreArchivo);
+            } else {
+                favoritos.push(nombreArchivo);
+            }
+            localStorage.setItem('favs_servidor', JSON.stringify(favoritos));
+            filtrarArchivos();
+        }
+
+        function cerrarReproductor() {
+            limpiarTemporizadorSlide();
+            const box = document.getElementById('reproductorBox');
+            const elem = document.getElementById('reproductorElemento');
+            elem.innerHTML = '';
+            box.style.display = 'none';
+        }
+
+        function abrirLightbox(url, titulo) {
+            currentLightboxUrl = url;
+            currentLightboxTitulo = titulo;
+
+            const img = document.getElementById('lightboxImg');
+            img.src = url;
+            img.classList.remove('zoomed');
+
+            document.getElementById('lightboxTitulo').innerText = titulo;
+            
+            const btnDesc = document.getElementById('lightboxBtnDescargar');
+            btnDesc.href = url;
+            btnDesc.download = titulo;
+
+            document.getElementById('lightboxOverlay').classList.add('activo');
+        }
+
+        function cerrarLightbox() {
+            document.getElementById('lightboxOverlay').classList.remove('activo');
+        }
+
+        function cerrarLightboxFuera(event) {
+            if (event.target.id === 'lightboxOverlay') cerrarLightbox();
+        }
+
+        function toggleZoomImg(e) {
+            e.stopPropagation();
+            document.getElementById('lightboxImg').classList.toggle('zoomed');
+        }
+
+        function toggleZoomBtn() {
+            document.getElementById('lightboxImg').classList.toggle('zoomed');
+        }
+
+        async function compartirImagen() {
+            const urlCompleta = window.location.href.split('#')[0].split('?')[0];
+            const enlaceFinal = new URL(currentLightboxUrl, urlCompleta).href;
+
+            if (navigator.share && navigator.canShare) {
+                try {
+                    await navigator.share({
+                        title: currentLightboxTitulo,
+                        text: 'Mira esta foto de mi servidor local TCL 205:',
+                        url: enlaceFinal
+                    });
+                    return;
+                } catch (e) {}
+            }
+
+            try {
+                await navigator.clipboard.writeText(enlaceFinal);
+                alert('🔗 ¡Enlace copiado al portapapeles!');
+            } catch (err) {
+                prompt("Copia este enlace manualmente:", enlaceFinal);
+            }
+        }
+
+        function actualizarReloj() {
+            const ahora = new Date();
+            const opcionesFecha = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('fecha').innerText = ahora.toLocaleDateString('es-ES', opcionesFecha);
+            document.getElementById('hora').innerText = ahora.toLocaleTimeString('es-ES');
+        }
+        setInterval(actualizarReloj, 1000);
+        actualizarReloj();
+
+        const CIUDAD = "Zaragoza";
+        async function obtenerTiempo() {
+            try {
+                const respuesta = await fetch(`https://wttr.in/${CIUDAD}?format=j1`);
+                if (!respuesta.ok) throw new Error('Error al obtener datos');
+                const datos = await respuesta.json();
+                const condicion = datos.current_condition[0];
+                const tempC = condicion.temp_C;
+                const descEs = condicion.lang_es ? condicion.lang_es[0].value : condicion.weatherDesc[0].value;
+                
+                let icono = '🌤️';
+                const descLower = descEs.toLowerCase();
+                if (descLower.includes('soleado') || descLower.includes('despejado')) icono = '☀';
+                else if (descLower.includes('nublado') || descLower.includes('cubierto')) icono = '☁️';
+                else if (descLower.includes('lluvia') || descLower.includes('llovizna')) icono = '🌧️';
+                else if (descLower.includes('tormenta')) icono = '⛈️';
+                else if (descLower.includes('nieve')) icono = '❄️';
+                else if (descLower.includes('niebla')) icono = '🌫️';
+
+                document.getElementById('ciudad-titulo').innerText = `📍 ${CIUDAD}`;
+                document.getElementById('clima-icono').innerText = icono;
+                document.getElementById('clima-temp').innerText = `${tempC}°C`;
+                document.getElementById('clima-desc').innerText = descEs;
+            } catch (e) {
+                document.getElementById('clima-desc').innerText = 'No disponible sin conexión';
+                document.getElementById('clima-icono').innerText = '🌐';
+            }
+        }
+        obtenerTiempo();
+        setInterval(obtenerTiempo, 1800000);
+
+        function abrirModal(idModal) { document.getElementById(idModal).classList.add('activo'); }
+        function cerrarModal(idModal) {
+            cerrarReproductor();
+            document.getElementById(idModal).classList.remove('activo');
+        }
+        function cerrarFuera(event, idModal) {
+            if (event.target.classList.contains('modal-overlay')) cerrarModal(idModal);
+        }
+
+        function salirDePagina() {
+            window.close();
+            setTimeout(() => { window.location.href = "about:blank"; }, 300);
+        }
+    </script>
+</body>
+</html>
+
