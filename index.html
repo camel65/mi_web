@@ -989,7 +989,6 @@
         }
 
         async function cargarArchivosDesdeServidor() {
-            const respuesta = await fetch('./archivos.json?v=' + new Date().getTime());
             const contenedor = document.getElementById('listaArchivos');
             contenedor.innerHTML = '<p style="text-align: center; color: var(--text-sub);">Cargando archivos...</p>';
 
@@ -1000,7 +999,6 @@
                 listaArchivosGlobal = await respuesta.json();
                 actualizarEstadisticas(listaArchivosGlobal);
                 renderizarListaArchivos(listaArchivosGlobal);
-
             } catch (error) {
                 console.error("Error al cargar archivos:", error);
                 contenedor.innerHTML = '<p style="text-align: center; color: var(--danger-color);">Error al conectar con la lista de archivos.</p>';
@@ -1487,3 +1485,6 @@
         }
 
         cargarClimaPorCiudad("ZARAGOZA");
+    </script>
+</body>
+</html>
