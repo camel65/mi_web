@@ -1431,6 +1431,67 @@
                 alert("¡Enlace de la imagen copiado al portapapeles!");
             }
         }
+      // Configuración del Clima (Modifica "Madrid" por la ciudad que prefieras)
+        async function cargarClimaPorCiudad(nombreCiudad) {
+            try {
+                // 1. Buscar las coordenadas (latitud y longitud) de la ciudad
+                const respuestaGeo = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(nombreCiudad)}&count=1&language=es&format=json`);
+                const datosGeo = await respuestaGeo.json();
+
+                if (!datosGeo.results || datosGeo.results.length === 0) {
+                    document.getElementById('clima-desc').innerText = "Ciudad no encontrada";
+                    return;
+                }
+
+                const ciudadInfo = datosGeo.results[0];
+                const lat = ciudadInfo.latitude;
+                const lon = ciudadInfo.longitude;
+                const pais = ciudadInfo.country || '';
+
+                // Actualizar el título de la tarjeta con la ciudad encontrada
+                document.getElementById('ciudad-titulo').innerText = `📍 ${ciudadInfo.name}${pais ? ', ' + pais : ''}`;
+
+                // 2. Obtener el clima actual usando las coordenadas
+                const respuestaClima = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code`);
+                const datosClima = await respuestaClima.json();
+
+                const temp = Math.round(datosClima.current.temperature_2m);
+                const codigoWmo = datosClima.current.weather_code;
+
+                // 3. Asignar icono y descripción según el código del clima (WMO)
+                let icono = "☀️";
+                let descripcion = "Despejado";
+
+                if (codigoWmo >= 1 && codigoWmo <= 3) {
+                    icono = "⛅";
+                    descripcion = "Parcialmente nublado";
+                } else if (codigoWmo >= 45 && codigoWmo <= 48) {
+                    icono = "🌫️";
+                    descripcion = "Niebla";
+                } else if (codigoWmo >= 51 && codigoWmo <= 67) {
+                    icono = "🌧️";
+                    descripcion = "Lluvia";
+                } else if (codigoWmo >= 71 && codigoWmo <= 77) {
+                    icono = "❄️";
+                    descripcion = "Nieve";
+                } else if (codigoWmo >= 95) {
+                    icono = "⚡";
+                    descripcion = "Tormenta";
+                }
+
+                document.getElementById('clima-icono').innerText = icono;
+                document.getElementById('clima-temp').innerText = `${temp}°C`;
+                document.getElementById('clima-desc').innerText = descripcion;
+
+            } catch (error) {
+                console.error("Error al cargar el clima:", error);
+                document.getElementById('clima-desc').innerText = "Error al cargar clima";
+            }
+        }
+
+        // Ejecutar al cargar la página (puedes cambiar "Madrid" por la ciudad que quieras)
+        cargarClimaPorCiudad("ZARAGOZA");
+   
     </script>
 </body>
 </html>
