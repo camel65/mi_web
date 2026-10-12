@@ -1002,20 +1002,22 @@
         }
 
         async function cargarArchivosDesdeServidor() {
-    const contenedor = document.getElementById('listaArchivos');
-    contenedor.innerHTML = '<p style="text-align: center; color: var(--text-sub);">Cargando archivos...</p>';
+            const contenedor = document.getElementById('listaArchivos');
+            contenedor.innerHTML = '<p style="text-align: center; color: var(--text-sub);">Cargando archivos...</p>';
 
-    try {
-        const respuesta = await fetch('archivos.json');
-        if (!respuesta.ok) throw new Error("No se pudo cargar la lista de archivos.");
-        
-        listaArchivosGlobal = await respuesta.json();
+            try {
+                // Usamos la ruta limpia para asegurar que GitHub Pages lo encuentre sin errores 404
+                const respuesta = await fetch('./archivos.json');
+                if (!respuesta.ok) throw new Error("No se pudo cargar la lista de archivos.");
+                
+                listaArchivosGlobal = await respuesta.json();
 
-        actualizarEstadisticas(listaArchivosGlobal);
-        renderizarListaArchivos(listaArchivosGlobal);
+                actualizarEstadisticas(listaArchivosGlobal);
+                renderizarListaArchivos(listaArchivosGlobal);
 
-    } catch (error) {
-        contenedor.innerHTML = '<p style="text-align: center; color: var(--danger-color);">Error al conectar con la lista de archivos.</p>';
+            } catch (error) {
+                console.error("Error al cargar archivos:", error);
+                contenedor.innerHTML = '<p style="text-align: center; color: var(--danger-color);">Error al conectar con la lista de archivos.</p>';
             }
         }
 
@@ -1278,7 +1280,6 @@
 
                 const player = document.getElementById('mediaPlayer');
 
-                // Memoria: recuerda por dónde ibas
                 const tiempoGuardado = localStorage.getItem('pos_' + nombreArchivo);
                 if (tiempoGuardado && parseFloat(tiempoGuardado) > 5) {
                     player.currentTime = parseFloat(tiempoGuardado);
@@ -1431,81 +1432,20 @@
 
         async function compartirImagen() {
             const urlCompleta = window.location.href.split('#')[0].split('?')[0];
-            const enlaceFinal = new URL(currentLightboxUrl, urlCompleta).href;
-
-            if (navigator.share && navigator.canShare) {
+            if (navigator.share) {
                 try {
                     await navigator.share({
                         title: currentLightboxTitulo,
-                        text: 'Mira esta foto de mi servidor local TCL 205:',
-                        url: enlaceFinal
+                        url: currentLightboxUrl
                     });
-                    return;
-                } catch (e) {}
+                } catch (err) {
+                    console.log('Error al compartir', err);
+                }
+            } else {
+                navigator.clipboard.writeText(currentLightboxUrl);
+                alert("¡Enlace de la imagen copiado al portapapeles!");
             }
-
-            try {
-                await navigator.clipboard.writeText(enlaceFinal);
-                alert('🔗 ¡Enlace copiado al portapapeles!');
-            } catch (err) {
-                prompt("Copia este enlace manualmente:", enlaceFinal);
-            }
-        }
-
-        function actualizarReloj() {
-            const ahora = new Date();
-            const opcionesFecha = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('fecha').innerText = ahora.toLocaleDateString('es-ES', opcionesFecha);
-            document.getElementById('hora').innerText = ahora.toLocaleTimeString('es-ES');
-        }
-        setInterval(actualizarReloj, 1000);
-        actualizarReloj();
-
-        const CIUDAD = "Zaragoza";
-        async function obtenerTiempo() {
-            try {
-                const respuesta = await fetch(`https://wttr.in/${CIUDAD}?format=j1`);
-                if (!respuesta.ok) throw new Error('Error al obtener datos');
-                const datos = await respuesta.json();
-                const condicion = datos.current_condition[0];
-                const tempC = condicion.temp_C;
-                const descEs = condicion.lang_es ? condicion.lang_es[0].value : condicion.weatherDesc[0].value;
-                
-                let icono = '🌤️';
-                const descLower = descEs.toLowerCase();
-                if (descLower.includes('soleado') || descLower.includes('despejado')) icono = '☀';
-                else if (descLower.includes('nublado') || descLower.includes('cubierto')) icono = '☁️';
-                else if (descLower.includes('lluvia') || descLower.includes('llovizna')) icono = '🌧️';
-                else if (descLower.includes('tormenta')) icono = '⛈️';
-                else if (descLower.includes('nieve')) icono = '❄️';
-                else if (descLower.includes('niebla')) icono = '🌫️';
-
-                document.getElementById('ciudad-titulo').innerText = `📍 ${CIUDAD}`;
-                document.getElementById('clima-icono').innerText = icono;
-                document.getElementById('clima-temp').innerText = `${tempC}°C`;
-                document.getElementById('clima-desc').innerText = descEs;
-            } catch (e) {
-                document.getElementById('clima-desc').innerText = 'No disponible sin conexión';
-                document.getElementById('clima-icono').innerText = '🌐';
-            }
-        }
-        obtenerTiempo();
-        setInterval(obtenerTiempo, 1800000);
-
-        function abrirModal(idModal) { document.getElementById(idModal).classList.add('activo'); }
-        function cerrarModal(idModal) {
-            cerrarReproductor();
-            document.getElementById(idModal).classList.remove('activo');
-        }
-        function cerrarFuera(event, idModal) {
-            if (event.target.classList.contains('modal-overlay')) cerrarModal(idModal);
-        }
-
-        function salirDePagina() {
-            window.close();
-            setTimeout(() => { window.location.href = "about:blank"; }, 300);
         }
     </script>
 </body>
 </html>
-
