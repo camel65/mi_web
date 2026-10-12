@@ -1261,7 +1261,7 @@
                 if (tipoPlaylist === 'audio') {
                     elem.innerHTML = `<audio id="mediaPlayer" controls autoplay src="${rutaCompleta}"></audio>`;
                 } else {
-                    elem.innerHTML = `<video id="mediaPlayer" controls autoplay src="${rutaCompleta}"></video>`;
+                    elem.innerHTML = `<video id="mediaPlayer" controls autoplay style="width: 100%; max-height: 70vh; border-radius: 8px;" src="${rutaCompleta}"></video>`;
                 }
 
                 const player = document.getElementById('mediaPlayer');
@@ -1431,10 +1431,10 @@
                 alert("¡Enlace de la imagen copiado al portapapeles!");
             }
         }
-      // Configuración del Clima (Modifica "Madrid" por la ciudad que prefieras)
+
+        // Configuración del Clima (Zaragoza)
         async function cargarClimaPorCiudad(nombreCiudad) {
             try {
-                // 1. Buscar las coordenadas (latitud y longitud) de la ciudad
                 const respuestaGeo = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(nombreCiudad)}&count=1&language=es&format=json`);
                 const datosGeo = await respuestaGeo.json();
 
@@ -1448,17 +1448,14 @@
                 const lon = ciudadInfo.longitude;
                 const pais = ciudadInfo.country || '';
 
-                // Actualizar el título de la tarjeta con la ciudad encontrada
                 document.getElementById('ciudad-titulo').innerText = `📍 ${ciudadInfo.name}${pais ? ', ' + pais : ''}`;
 
-                // 2. Obtener el clima actual usando las coordenadas
                 const respuestaClima = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code`);
                 const datosClima = await respuestaClima.json();
 
                 const temp = Math.round(datosClima.current.temperature_2m);
                 const codigoWmo = datosClima.current.weather_code;
 
-                // 3. Asignar icono y descripción según el código del clima (WMO)
                 let icono = "☀️";
                 let descripcion = "Despejado";
 
@@ -1489,9 +1486,4 @@
             }
         }
 
-        // Ejecutar al cargar la página (puedes cambiar "Madrid" por la ciudad que quieras)
         cargarClimaPorCiudad("ZARAGOZA");
-   
-    </script>
-</body>
-</html>
