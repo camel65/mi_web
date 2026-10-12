@@ -993,7 +993,7 @@
             contenedor.innerHTML = '<p style="text-align: center; color: var(--text-sub);">Cargando archivos...</p>';
 
             try {
-                const respuesta = await fetch('./archivos.json');
+                const respuesta = await fetch('./archivos.json?v=' + new Date().getTime());
                 if (!respuesta.ok) throw new Error("No se pudo cargar la lista de archivos.");
                 
                 listaArchivosGlobal = await respuesta.json();
