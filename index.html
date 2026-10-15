@@ -1,23 +1,11 @@
 <!DOCTYPE html>
-<html lang="es" data-tema="violeta">
+<html lang="es" data-tema="cyberpunk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Control</title>
     <style>
-        :root[data-tema="violeta"] {
-            --bg-color: #0d0b18;
-            --bg-gradient: radial-gradient(circle at 50% 0%, #2a0845 0%, #0d0b18 100%);
-            --card-bg: rgba(25, 18, 48, 0.75);
-            --card-border: rgba(168, 85, 247, 0.3);
-            --accent-color: #00f2fe;
-            --text-main: #f3f4f6;
-            --text-sub: #a78bfa;
-            --danger-color: #ff0055;
-            --hover-bg: rgba(0, 242, 254, 0.12);
-            --badge-bg: rgba(168, 85, 247, 0.25);
-        }
-
+        
         :root[data-tema="cyberpunk"] {
             --bg-color: #050b14;
             --bg-gradient: radial-gradient(circle at 50% 0%, #0d2b45 0%, #050b14 100%);
@@ -31,7 +19,20 @@
             --badge-bg: rgba(0, 242, 254, 0.25);
         }
 
-        :root[data-tema="oscuro"] {
+         :root[data-tema="violeta"] {
+            --bg-color: #0d0b18;
+            --bg-gradient: radial-gradient(circle at 50% 0%, #2a0845 0%, #0d0b18 100%);
+            --card-bg: rgba(25, 18, 48, 0.75);
+            --card-border: rgba(168, 85, 247, 0.3);
+            --accent-color: #00f2fe;
+            --text-main: #f3f4f6;
+            --text-sub: #a78bfa;
+            --danger-color: #ff0055;
+            --hover-bg: rgba(0, 242, 254, 0.12);
+            --badge-bg: rgba(168, 85, 247, 0.25);
+        }  
+       
+         :root[data-tema="oscuro"] {
             --bg-color: #0a0a0c;
             --bg-gradient: radial-gradient(circle at 50% 0%, #1c1d22 0%, #0a0a0c 100%);
             --card-bg: rgba(22, 23, 28, 0.85);
@@ -760,12 +761,12 @@
         <header>
             <div class="header-texto">
                 <h1>MI WEB</h1>
-                <p class="subtitulo">Servidor GitHub</p>
+                <p class="subtitulo">GitHub</p>
             </div>
             <div class="header-acciones">
                 <select class="select-tema" onchange="cambiarTema(this.value)">
-                    <option value="violeta">🎨 Violeta Neón</option>
                     <option value="cyberpunk">⚡ Cyberpunk Cyan</option>
+                    <option value="violeta">🎨 Violeta Neón</option>
                     <option value="oscuro">🌙 Oscuro Profundo</option>
                 </select>
 
@@ -837,9 +838,9 @@
                 <a href="https://www.loteriasyapuestas.es/es/resultados/primitiva/comprobar" target="_blank" class="tarjeta-enlace"><span>💰</span> Comprobar Primitiva</a>
                 <a href="https://www.tarkus.info/autodefinidos/" target="_blank" class="tarjeta-enlace"><span>📝</span> Autodefinidos</a>
                 <a href="https://myphysicslab.com" target="_blank" class="tarjeta-enlace"><span>⚗️</span> Laboratorio de Física</a>
-                <a href="https://cybermap.kaspersky.com/es/" target="_blank" class="tarjeta-enlace"><span>🌍</span> Amenazas Cibernéticas</a>
+                <a href="https://cybermap.kaspersky.com/" target="_blank" class="tarjeta-enlace"><span>🌍</span> Amenazas Cibernéticas</a>
                 <a href="https://www.museodelprado.es" target="_blank" class="tarjeta-enlace"><span>🖼️</span> Museo del Prado</a>
-                <a href="https://freeinvaders.org" target="_blank" class="tarjeta-enlace"><span>🛸</span> Space Invaders</a>
+                <a href="https://arcadegamebox.com/es/games/tetris-arcade/" target="_blank" class="tarjeta-enlace"><span>🏗️</span>Tetris Arcade</a>
                 <a href="https://www.meneame.net" target="_blank" class="tarjeta-enlace"><span>🟩</span> Menéame</a>
                 <a href="https://www.google.es/maps/" target="_blank" class="tarjeta-enlace"><span>🌍</span> Google Maps</a>
                 <a href="https://www.elhacker.net" target="_blank" class="tarjeta-enlace"><span>💻</span> elHacker.net</a>
@@ -848,6 +849,29 @@
                 <a href="https://www.cinelibreonline.com" target="_blank" class="tarjeta-enlace"><span>🎞️</span> Cine Libre</a>
                 <a href="https://www.deepl.com/es/translator" target="_blank" class="tarjeta-enlace"><span>💻</span> Traductor DeepL</a>
                 <a href="https://haveibeenpwned.com" target="_blank" class="tarjeta-enlace"><span>📧</span> Seg. Email</a>
+                <a href="https://www.omfgdogs.com/#" target="_blank" class="tarjeta-enlace"><span>🐶</span> Web Curiosa-Carrera de Perros-</a>
+                <a href="https://cat-bounce.com" target="_blank" class="tarjeta-enlace"><span>🐈</span> Web Curiosa-Lanza y Arrastra los Gatos-</a>
+                <a href="https://endless.horse" target="_blank" class="tarjeta-enlace"><span>🐎</span> Web Curiosa-Caballo-</a>
+                <a href="https://papertoilet.com" target="_blank" class="tarjeta-enlace"><span>🧻</span> Web Curiosa-Rollo de Papel WC-</a>
+                <a href="https://rrrgggbbb.com/#" target="_blank" class="tarjeta-enlace"><span>📚</span> Web Curiosa-Haz Click en las Letras-</a>
+                <a href="https://homers-webpage.vercel.app" target="_blank" class="tarjeta-enlace"><span>🏃</span> Web Curiosa-Si te gustan Los Simpson-</a>
+                <a href="https://milliondollarhomepage.com" target="_blank" class="tarjeta-enlace"><span>🗺️</span> Web Curiosa-La Página de las mil Webs-</a>
+                <a href="https://pikachizer.eye-of-newt.com" target="_blank" class="tarjeta-enlace"><span>🔰</span> Web Curiosa-Traduce al idioma Pikachu-</a>
+                <a href="https://worlds-highest-website.com/#pos1" target="_blank" class="tarjeta-enlace"><span>🗞️</span> Web Curiosa-La Web mas larga del Mundo-</a>
+                <a href="https://strobe.cool" target="_blank" class="tarjeta-enlace"><span>🚩</span> Web Curiosa-Ilusión Óptica-</a>
+                <a href="https://sentimentalcorp.org" target="_blank" class="tarjeta-enlace"><span>🌌</span> Web Curiosa-Contenido Subliminal-</a>
+                <a href="https://zoomquilt.org" target="_blank" class="tarjeta-enlace"><span>🌌</span> Web Curiosa-Contenido Subliminal-</a>
+                <a href="https://www.mapcrunch.com" target="_blank" class="tarjeta-enlace"><span>🔎</span> Web Curiosa-Web para Viajar-</a>
+                <a href="https://emojitracker.com" target="_blank" class="tarjeta-enlace"><span>😊</span> Web Curiosa-Emojipedia-</a>
+                <a href="https://stars.chromeexperiments.com" target="_blank" class="tarjeta-enlace"><span>🔭</span> Web Curiosa-Date un paseo por el Cosmos-</a>
+                <a href="https://firstpersontetris.com" target="_blank" class="tarjeta-enlace"><span>🧮</span> Web Curiosa-Un Tetris Especial-</a>
+                <a href="https://downforeveryoneorjustme.com" target="_blank" class="tarjeta-enlace"><span>🗺️</span> Web Curiosa-Comprobar URL-</a>
+                <a href="https://www.music-map.com" target="_blank" class="tarjeta-enlace"><span>🎤</span> Web Curiosa-Pon el nombre de tu artista o banda-</a>
+                <a href="https://es.eurobilltracker.com" target="_blank" class="tarjeta-enlace"><span>💰</span> Web Curiosa-Sigue el rastro del dinero-</a>
+                <a href="http://www.staggeringbeauty.com"  target="_blank" class="tarjeta-enlace"><span>🪱</span> Web Curiosa-Gusano Epiléptico-</a>
+                <a href="https://mitchtrale.com" target="_blank" class="tarjeta-enlace"><span>🎞️</span> Web Curiosa-Imágenes Subliminales-</a>
+                <a href="https://www.googlefight.com/index.php" target="_blank" class="tarjeta-enlace"><span>🖥️</span> Web Curiosa-Google Fight-</a>
+                <a href="https://thatsthefinger.com" target="_blank" class="tarjeta-enlace"><span>🌭</span> Web Curiosa-La Salchicha Infinita-</a>
             </div>
             <button class="btn-subir-modal" onclick="subirArribaModal('contenidoEnlaces')" title="Subir arriba">⬆</button>
         </div>
