@@ -1452,7 +1452,7 @@
         }
 
         // Configuración del Clima (Zaragoza)
-        async function cargarClimaPorCiudad(nombreCiudad) {
+        async function cargarClimaPorCiudad(ZARAGOZA) {
             try {
                 const respuestaGeo = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(nombreCiudad)}&count=1&language=es&format=json`);
                 const datosGeo = await respuestaGeo.json();
