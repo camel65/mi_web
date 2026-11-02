@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Control</title>
     <style>
-        
         :root[data-tema="cyberpunk"] {
             --bg-color: #050b14;
             --bg-gradient: radial-gradient(circle at 50% 0%, #0d2b45 0%, #050b14 100%);
@@ -19,7 +18,7 @@
             --badge-bg: rgba(0, 242, 254, 0.25);
         }
 
-         :root[data-tema="violeta"] {
+        :root[data-tema="violeta"] {
             --bg-color: #0d0b18;
             --bg-gradient: radial-gradient(circle at 50% 0%, #2a0845 0%, #0d0b18 100%);
             --card-bg: rgba(25, 18, 48, 0.75);
@@ -30,9 +29,9 @@
             --danger-color: #ff0055;
             --hover-bg: rgba(0, 242, 254, 0.12);
             --badge-bg: rgba(168, 85, 247, 0.25);
-        }  
+        }
        
-         :root[data-tema="oscuro"] {
+        :root[data-tema="oscuro"] {
             --bg-color: #0a0a0c;
             --bg-gradient: radial-gradient(circle at 50% 0%, #1c1d22 0%, #0a0a0c 100%);
             --card-bg: rgba(22, 23, 28, 0.85);
@@ -834,7 +833,7 @@
             </div>
             <div class="grid-enlaces">
                 <a href="https://www.google.com" target="_blank" class="tarjeta-enlace"><span>🔍</span> Google</a>
-                <a href="https://destroy.spritefusion.com" target="_blank" class="tarjeta-enlace"><span>🩻</span> Juego Destructor Páginas Web</a>
+                 <a href="https://destroy.spritefusion.com" target="_blank" class="tarjeta-enlace"><span>🩻</span> Juego Destructor Páginas Web</a>
                 <a href="https://www.loteriasyapuestas.es/es/resultados/primitiva/comprobar" target="_blank" class="tarjeta-enlace"><span>💰</span> Comprobar Primitiva</a>
                 <a href="https://www.tarkus.info/autodefinidos/" target="_blank" class="tarjeta-enlace"><span>📝</span> Autodefinidos</a>
                 <a href="https://myphysicslab.com" target="_blank" class="tarjeta-enlace"><span>⚗️</span> Laboratorio de Física</a>
@@ -869,7 +868,8 @@
                 <a href="https://camel65.github.io/La-Metamorfosis/" target="_blank" class="tarjeta-enlace"><span>👨‍💼🪲</span>La Metamorfosis</a>
                 <a href="https://camel65.github.io/Ara-as/" target="_blank" class="tarjeta-enlace"><span>🕷️</span>Arañas</a>
                 <a href="https://camel65.github.io/Pir-mide/" target="_blank" class="tarjeta-enlace"><span>🏗️</span>Pirámide</a>
-              </div>
+
+            </div>
             <button class="btn-subir-modal" onclick="subirArribaModal('contenidoEnlaces')" title="Subir arriba">⬆</button>
         </div>
     </div>
@@ -1452,7 +1452,7 @@
         }
 
         // Configuración del Clima (Zaragoza)
-        async function cargarClimaPorCiudad(ZARAGOZA) {
+        async function cargarClimaPorCiudad(nombreCiudad) {
             try {
                 const respuestaGeo = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(nombreCiudad)}&count=1&language=es&format=json`);
                 const datosGeo = await respuestaGeo.json();
